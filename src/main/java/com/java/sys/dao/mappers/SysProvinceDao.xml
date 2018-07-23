@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.sys.dao.SysProvinceDao">
+
+	<sql id="tableColumns">
+		a.id AS "id",
+	    a.name AS "name"
+	</sql>
+	
+	<select id="get" resultType="SysProvince">
+		SELECT 
+			<include refid="tableColumns"/>
+		FROM `sys_province` a
+		WHERE a.id = #{id}
+	</select>
+	
+    <select id="findList" resultType="SysProvince">
+        SELECT 
+	        <include refid="tableColumns"/>
+        FROM 
+        	`sys_province` a
+        <where>
+			<if test="name != null and name != ''">
+        		AND a.name = #{name}
+        	</if>
+        </where>
+        <if test="first != null and max != null">
+			LIMIT #{first},#{max}
+		</if>
+    </select>
+    
+    <insert id="insert">
+		INSERT INTO sys_province(
+		    id,
+        	name
+		) VALUES (
+		    #{id},
+        	#{name}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_province SET 	
+			name = #{name}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="exec">
+		${sql }
+	</update>
+ 	
+ 	<update id="delete">
+		DELETE FROM sys_province
+		WHERE id = #{id}
+	</update>
+    
+</mapper>

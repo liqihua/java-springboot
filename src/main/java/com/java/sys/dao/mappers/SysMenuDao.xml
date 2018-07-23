@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.sys.dao.SysMenuDao">
+
+	<sql id="tableColumns">
+		a.id AS "id",
+	    a.parent_id AS "parentId",
+	    a.parent_name AS "parentName",
+	    a.name AS "name",
+	    a.level AS "level",
+	    a.href AS "href",
+	    a.target AS "target",
+	    a.icon AS "icon",
+	    a.hide AS "hide",
+	    a.rank AS "rank",
+	    a.update_date AS "updateDate",
+	    a.create_date AS "createDate"
+	</sql>
+	
+	<select id="get" resultType="SysMenu">
+		SELECT 
+			<include refid="tableColumns"/>
+		FROM `sys_menu` a
+		WHERE a.id = #{id}
+	</select>
+	
+    <select id="findList" resultType="SysMenu">
+        SELECT 
+	        <include refid="tableColumns"/>
+        FROM 
+        	`sys_menu` a
+        <where>
+        	<include refid="whereSQL"/>
+        </where>
+        <choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+        <if test="first != null and max != null">
+			LIMIT #{first},#{max}
+		</if>
+    </select>
+    
+    <sql id="whereSQL">
+		<if test="parentId != null and parentId != ''">
+       		AND a.parent_id = #{parentId}
+       	</if>
+       	<if test="parentName != null and parentName != ''">
+       		AND a.parent_name = #{parentName}
+       	</if>
+		<if test="name != null and name != ''">
+       		AND a.name = #{name}
+       	</if>
+       	<if test="level != null and level != ''">
+       		AND a.level = #{level}
+       	</if>
+		<if test="rank != null and rank != ''">
+       		AND a.rank = #{rank}
+       	</if>
+		<if test="href != null and href != ''">
+       		AND a.href = #{href}
+       	</if>
+		<if test="target != null and target != ''">
+       		AND a.target = #{target}
+       	</if>
+		<if test="icon != null and icon != ''">
+       		AND a.icon = #{icon}
+       	</if>
+		<if test="hide != null and hide != ''">
+       		AND a.hide = #{hide}
+       	</if>
+		<if test="updateDate != null ">
+       		AND a.update_date = #{updateDate}
+       	</if>
+		<if test="createDate != null ">
+       		AND a.create_date = #{createDate}
+       	</if>
+	</sql>
+    
+    <insert id="insert">
+		INSERT INTO sys_menu(
+		    id,
+        	parent_id,
+        	parent_name,
+        	name,
+        	level,
+        	href,
+        	target,
+        	icon,
+        	hide,
+        	rank,
+        	update_date,
+        	create_date
+		) VALUES (
+		    #{id},
+        	#{parentId},
+        	#{parentName},
+        	#{name},
+        	#{level},
+        	#{href},
+        	#{target},
+        	#{icon},
+        	#{hide},
+        	#{rank},
+        	#{updateDate},
+        	#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_menu SET 	
+		    parent_id = #{parentId},
+		    parent_name = #{parentName},
+			name = #{name},
+			level = #{level},
+			href = #{href},
+			target = #{target},
+			icon = #{icon},
+			hide = #{hide},
+			rank = #{rank},
+			update_date = #{updateDate},
+			create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="exec">
+		${sql }
+	</update>
+ 	
+ 	<update id="delete">
+		DELETE FROM sys_menu
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getCount" resultType="Integer">
+		SELECT count(1) FROM `sys_menu` a
+		<where>
+			<include refid="whereSQL"/>
+		</where>
+	</select>
+	
+    
+</mapper>

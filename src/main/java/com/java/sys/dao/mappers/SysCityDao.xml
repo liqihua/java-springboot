@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.sys.dao.SysCityDao">
+
+	<sql id="tableColumns">
+		a.id AS "id",
+	    a.name AS "name",
+	    a.province_id AS "provinceId",
+	    a.city_no AS "cityNo",
+	    a.full_spell AS "fullSpell",
+	    a.first_spell AS "firstSpell"
+	</sql>
+	
+	<select id="get" resultType="SysCity">
+		SELECT 
+			<include refid="tableColumns"/>
+		FROM `sys_city` a
+		WHERE a.id = #{id}
+	</select>
+	
+    <select id="findList" resultType="SysCity">
+        SELECT 
+	        <include refid="tableColumns"/>
+        FROM 
+        	`sys_city` a
+        <where>
+			<if test="name != null and name != ''">
+        		AND a.name = #{name}
+        	</if>
+			<if test="provinceId != null and provinceId != ''">
+        		AND a.province_id = #{provinceId}
+        	</if>
+			<if test="cityNo != null and cityNo != ''">
+        		AND a.city_no = #{cityNo}
+        	</if>
+			<if test="fullSpell != null and fullSpell != ''">
+        		AND a.full_spell = #{fullSpell}
+        	</if>
+			<if test="firstSpell != null and firstSpell != ''">
+        		AND a.first_spell = #{firstSpell}
+        	</if>
+        </where>
+        <if test="first != null and max != null">
+			LIMIT #{first},#{max}
+		</if>
+    </select>
+    
+    <insert id="insert">
+		INSERT INTO sys_city(
+		    id,
+        	name,
+        	province_id,
+        	city_no,
+        	full_spell,
+        	first_spell
+		) VALUES (
+		    #{id},
+        	#{name},
+        	#{provinceId},
+        	#{cityNo},
+        	#{fullSpell},
+        	#{firstSpell}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_city SET 	
+		    name = #{name},
+			province_id = #{provinceId},
+			city_no = #{cityNo},
+			full_spell = #{fullSpell},
+			first_spell = #{firstSpell}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="exec">
+		${sql }
+	</update>
+ 	
+ 	<update id="delete">
+		DELETE FROM sys_city
+		WHERE id = #{id}
+	</update>
+    
+</mapper>

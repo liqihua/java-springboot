@@ -1,0 +1,82 @@
+<<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+	<script src="jquery.min.js"></script>
+	<script src="jquery.Jcrop.min.js"></script>
+	<link rel="stylesheet" href="jquery.Jcrop.css" type="text/css" />
+	<style type="text/css">
+	#div-preview-wrap {
+	  display: block;
+	  position: absolute;
+	  z-index: 2000;
+	  top: 10px;
+	  right: -280px;
+	  padding: 6px;
+	  border: 1px rgba(0,0,0,.4) solid;
+	  background-color: white;
+	  -webkit-border-radius: 6px;
+	  -moz-border-radius: 6px;
+	  border-radius: 6px;
+	  -webkit-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	  -moz-box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	  box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	}
+	
+	#div-preview-wrap,.div-preview{
+		width: 250px;
+	  	height: 170px;
+	  	overflow: hidden;
+	  	border:1px solid red;
+	}
+	</style>
+</head>
+<body>
+	<img id="img-origin" src="1.jpg"/>
+	<div id="div-preview-wrap">
+		<div class="div-preview">
+			<img src="1.jpg"/>
+		</div>
+	</div>
+	
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		var jcrop_api,
+        boundx,
+        boundy,
+        $preview = $('#div-preview-wrap'),
+        $pimg = $('.div-preview img'),
+        xsize = $preview.width(),
+        ysize = $preview.height();
+
+        $('#img-origin').Jcrop({
+	      	onChange: updatePreview,
+	      	onSelect: updatePreview,
+	      	aspectRatio: xsize / ysize
+    	},function(){
+	      	var bounds = this.getBounds();
+	      	boundx = bounds[0];
+	      	boundy = bounds[1];
+	      	jcrop_api = this;
+      		$preview.appendTo(jcrop_api.ui.holder);
+    	});
+
+    	function updatePreview(c){
+    		console.log("x1:"+c.x+",y1:"+c.y+",x2:"+c.x2+",y2:"+c.y2+",width:"+c.w+",height:"+c.h);
+      		if (parseInt(c.w) > 0){
+	        	var rx = xsize / c.w;
+	        	var ry = ysize / c.h;
+	       		$pimg.css({
+	          		width: Math.round(rx * boundx) + 'px',
+	          		height: Math.round(ry * boundy) + 'px',
+	          		marginLeft: '-' + Math.round(rx * c.x) + 'px',
+	          		marginTop: '-' + Math.round(ry * c.y) + 'px'
+	        	});
+      		}
+    	};
+        
+	});
+	</script>
+</body>
+</html>

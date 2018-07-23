@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.sys.dao.SysDistrictDao">
+
+	<sql id="tableColumns">
+		    a.id AS "id",
+	    a.name AS "name",
+	    a.city_id AS "cityId",
+	    a.post_code AS "postCode"
+	</sql>
+	
+	<select id="get" resultType="SysDistrict">
+		SELECT 
+			<include refid="tableColumns"/>
+		FROM `sys_district` a
+		WHERE a.id = #{id}
+	</select>
+	
+    <select id="findList" resultType="SysDistrict">
+        SELECT 
+	        <include refid="tableColumns"/>
+        FROM 
+        	`sys_district` a
+        <where>
+			<if test="name != null and name != ''">
+        		AND a.name = #{name}
+        	</if>
+			<if test="cityId != null and cityId != ''">
+        		AND a.city_id = #{cityId}
+        	</if>
+			<if test="postCode != null and postCode != ''">
+        		AND a.post_code = #{postCode}
+        	</if>
+        </where>
+        <if test="first != null and max != null">
+			LIMIT #{first},#{max}
+		</if>
+    </select>
+    
+    <insert id="insert">
+		INSERT INTO sys_district(
+		            	id,
+        	name,
+        	city_id,
+        	post_code
+		) VALUES (
+		            	#{id},
+        	#{name},
+        	#{cityId},
+        	#{postCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_district SET 	
+		    			name = #{name},
+			city_id = #{cityId},
+			post_code = #{postCode}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="exec">
+		${sql }
+	</update>
+ 	
+ 	<update id="delete">
+		DELETE FROM sys_district
+		WHERE id = #{id}
+	</update>
+    
+</mapper>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.sys.dao.SysDictDao">
+
+	<sql id="tableColumns">
+			a.id AS "id",
+		a.type AS "type",
+		a.label AS "label",
+		a.value AS "value",
+		a.description AS "description",
+		a.rank AS "rank",
+		a.create_date AS "createDate",
+		a.update_date AS "updateDate"
+	</sql>
+	
+	<select id="get" resultType="SysDict">
+		SELECT 
+			<include refid="tableColumns"/>
+		FROM `sys_dict` a
+		WHERE a.id = #{id}
+	</select>
+	
+    <select id="findList" resultType="SysDict">
+        SELECT 
+	        <include refid="tableColumns"/>
+        FROM 
+        	`sys_dict` a
+        <where>
+        	<include refid="whereSQL"/>
+        </where>
+        <choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+        <if test="first != null and max != null">
+			LIMIT #{first},#{max}
+		</if>
+    </select>
+    
+    <sql id="whereSQL">
+    	<if test="keysType != null and keysType != ''">
+    		AND a.type LIKE concat('%',#{keysType},'%') 
+    	</if>
+		<if test="type != null and type != ''">
+    		AND a.type = #{type}
+    	</if>
+		<if test="label != null and label != ''">
+    		AND a.label = #{label}
+    	</if>
+		<if test="value != null and value != ''">
+    		AND a.value = #{value}
+    	</if>
+		<if test="description != null and description != ''">
+    		AND a.description = #{description}
+    	</if>
+		<if test="rank != null and rank != ''">
+    		AND a.rank = #{rank}
+    	</if>
+		<if test="createDate != null ">
+    		AND a.create_date = #{createDate}
+    	</if>
+		<if test="updateDate != null ">
+    		AND a.update_date = #{updateDate}
+    	</if>
+    </sql>
+    
+    <insert id="insert">
+		INSERT INTO sys_dict(
+		            	id,
+        	type,
+        	label,
+        	value,
+        	description,
+        	rank,
+        	create_date,
+        	update_date
+		) VALUES (
+		            	#{id},
+        	#{type},
+        	#{label},
+        	#{value},
+        	#{description},
+        	#{rank},
+        	#{createDate},
+        	#{updateDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_dict SET 	
+		    			type = #{type},
+			label = #{label},
+			value = #{value},
+			description = #{description},
+			rank = #{rank},
+			create_date = #{createDate},
+			update_date = #{updateDate}
+		WHERE id = #{id}
+	</update>
+ 	
+ 	<update id="exec">
+		${sql }
+	</update>
+ 	
+ 	<update id="delete">
+		DELETE FROM sys_dict
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getCount" resultType="Integer">
+		SELECT count(1) FROM `sys_dict` a
+		<where>
+			<include refid="whereSQL"/>
+		</where>
+	</select>
+    
+</mapper>

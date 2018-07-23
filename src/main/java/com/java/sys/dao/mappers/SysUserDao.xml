@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.sys.dao.SysUserDao">
+
+	<sql id="tableColumns">
+		a.id AS "id",
+	    a.username AS "username",
+	    a.password AS "password",
+	    a.locked AS "locked",
+	    a.gender AS "gender",
+	    a.nickname AS "nickname",
+	    a.update_date AS "updateDate",
+	    a.create_date AS "createDate"
+	</sql>
+	
+	<select id="get" resultType="SysUser">
+		SELECT 
+			<include refid="tableColumns"/>
+		FROM `sys_user` a
+		WHERE a.id = #{id}
+	</select>
+	
+    <select id="findList" resultType="SysUser">
+        SELECT 
+	        <include refid="tableColumns"/>
+        FROM 
+        	`sys_user` a
+        <where>
+			<include refid="whereSQL"/>
+        </where>
+        <choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+        <if test="first != null and max != null">
+			LIMIT #{first},#{max}
+		</if>
+    </select>
+    
+    <sql id="whereSQL">
+    	<if test="username != null and username != ''">
+       		AND a.username = #{username}
+       	</if>
+		<if test="password != null and password != ''">
+       		AND a.password = #{password}
+       	</if>
+		<if test="locked != null and locked != ''">
+       		AND a.locked = #{locked}
+       	</if>
+		<if test="gender != null and gender != ''">
+       		AND a.gender = #{gender}
+       	</if>
+		<if test="nickname != null and nickname != ''">
+       		AND a.nickname = #{nickname}
+       	</if>
+		<if test="updateDate != null ">
+       		AND a.update_date = #{updateDate}
+       	</if>
+		<if test="createDate != null ">
+       		AND a.create_date = #{createDate}
+       	</if>
+    </sql>
+    
+    <insert id="insert">
+		INSERT INTO sys_user(
+		    id,
+        	username,
+        	password,
+        	locked,
+        	gender,
+        	nickname,
+        	update_date,
+        	create_date
+		) VALUES (
+		    #{id},
+        	#{username},
+        	#{password},
+        	#{locked},
+        	#{gender},
+        	#{nickname},
+        	#{updateDate},
+        	#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_user SET 	
+		    username = #{username},
+			password = #{password},
+			locked = #{locked},
+			gender = #{gender},
+			nickname = #{nickname},
+			update_date = #{updateDate},
+			create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="exec">
+		${sql }
+	</update>
+ 	
+ 	<update id="delete">
+		DELETE FROM sys_user
+		WHERE id = #{id}
+	</update>
+	
+	<select id="getCount" resultType="Integer">
+		SELECT count(1) FROM `sys_user` a
+		<where>
+			<include refid="whereSQL"/>
+		</where>
+	</select>
+    
+</mapper>

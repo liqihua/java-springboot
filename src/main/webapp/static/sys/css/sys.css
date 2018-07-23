@@ -1,0 +1,9 @@
+.sys-font{font-family:微软雅黑;}
+.ul-form{position:relative;margin-left:0;}
+.ul-form>li{list-style-type:none;}
+.ul-form>li:not(.clear){float:left;margin-left:30px;margin-top:10px;}
+.ul-form>li>label{font-size:13px;}
+.clear{clear:both;}
+.hide{display:none;}
+.img-form-loading{width:25px;height:25px;}
+.input-pageGo{float:left;}

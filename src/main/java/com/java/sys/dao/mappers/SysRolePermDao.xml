@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.java.sys.dao.SysRolePermDao">
+
+	<sql id="tableColumns">
+		a.id AS "id",
+	    a.role_id AS "roleId",
+	    a.perm_id AS "permId",
+	    a.update_date AS "updateDate",
+	    a.create_date AS "createDate"
+	</sql>
+	
+	<select id="get" resultType="SysRolePerm">
+		SELECT 
+			<include refid="tableColumns"/>
+		FROM `sys_role_perm` a
+		WHERE a.id = #{id}
+	</select>
+	
+    <select id="findList" resultType="SysRolePerm">
+        SELECT 
+	        <include refid="tableColumns"/>
+        FROM 
+        	`sys_role_perm` a
+        <where>
+			<if test="roleId != null and roleId != ''">
+        		AND a.role_id = #{roleId}
+        	</if>
+			<if test="permId != null and permId != ''">
+        		AND a.perm_id = #{permId}
+        	</if>
+			<if test="updateDate != null ">
+        		AND a.update_date = #{updateDate}
+        	</if>
+			<if test="createDate != null ">
+        		AND a.create_date = #{createDate}
+        	</if>
+        </where>
+        <choose>
+			<when test="orderBy != null and orderBy != ''">
+				ORDER BY ${orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.create_date DESC
+			</otherwise>
+		</choose>
+        <if test="first != null and max != null">
+			LIMIT #{first},#{max}
+		</if>
+    </select>
+    
+    <insert id="insert">
+		INSERT INTO sys_role_perm(
+		    id,
+        	role_id,
+        	perm_id,
+        	update_date,
+        	create_date
+		) VALUES (
+		            	#{id},
+        	#{roleId},
+        	#{permId},
+        	#{updateDate},
+        	#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE sys_role_perm SET 	
+		    role_id = #{roleId},
+			perm_id = #{permId},
+			update_date = #{updateDate},
+			create_date = #{createDate}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="exec">
+		${sql }
+	</update>
+ 	
+ 	<update id="delete">
+		DELETE FROM sys_role_perm
+		WHERE id = #{id}
+	</update>
+    
+</mapper>

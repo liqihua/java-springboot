@@ -1,0 +1,24 @@
+{
+    "button": [
+    	{
+            "name": "demo",
+            "sub_button":[
+            	{
+		            "name": "测试一",
+		            "type": "view",
+		            "url": "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx6d0baf22735cf3d4&redirect_uri=http://域名/项目名/web/test/weixin/getCode.jsp&response_type=code&scope=snsapi_base&state=mystate#wechat_redirect"
+		        },
+            	{
+		            "name": "测试二",
+		            "type": "view",
+		            "url": "http://域名/项目名/web/test/weixin/chooseImage.html"
+		        },
+		        {
+		            "name": "测试三",
+		            "type": "view",
+		            "url": "http://域名/项目名/web/text/weixin/wxPayPub.html"
+		        }
+            ]
+        }
+    ]
+}
