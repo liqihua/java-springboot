@@ -22,7 +22,6 @@ import java.io.StringWriter;
 public class SysControllerAdvice extends BaseController{
     private static final Logger LOG = LoggerFactory.getLogger(SysControllerAdvice.class);
 
-    //400错误->缺少参数异常
     @ExceptionHandler({RuntimeException.class})
     @ResponseBody
     public ResponseEntity<BaseResult> runtimeException(RuntimeException ex){
