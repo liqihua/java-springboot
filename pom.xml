@@ -12,6 +12,7 @@
   	<properties>
   		<version.jackson>2.9.0</version.jackson>
   		<version.shiro>1.4.0</version.shiro>
+		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
   	</properties>
   	
   	<!-- nexus -->
@@ -414,14 +415,14 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-			<!-- docker插件 -->
+			<!-- docker插件 使用dockerfile方式 -->
 			<!-- imageName：<imageName>镜像名称:tag名称</imageName>-->
 			<!-- execution：把构建镜像执行操作绑定到mvn package操作，相当于mvn package docker:build => mvn package 就ok -->
 			<!--<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<configuration>
-					<imageName>镜像名称:${timestamp}</imageName>
+					<imageName>镜像名称:${maven.build.timestamp}</imageName>
 					<dockerDirectory>${project.basedir}/</dockerDirectory>
 					<skipDockerBuild>false</skipDockerBuild>
 				</configuration>
@@ -435,23 +436,38 @@
 					</execution>
 				</executions>
 			</plugin>-->
-			<!-- 获取时间戳插件，引用时间戳变量方式：${timestamp} -->
+
+			<!-- docker插件直接上传仓库方式 -->
 			<!--<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>buildnumber-maven-plugin</artifactId>
-				<version>1.4</version>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>0.9.6</version>
 				<configuration>
-					<timestampFormat>yyyyMMddHHmmss</timestampFormat>
+					<allowInsecureRegistries>true</allowInsecureRegistries>
+					<from>
+						<image>172.16.6.17:5000/openjdk</image>
+					</from>
+					<to>
+						<image>172.16.6.17:5000/louxe-oss-portal:${buildCode}</image>
+					</to>
+					<container>
+						<mainClass>com.cloudsplus.protal.Application</mainClass>
+						<ports>
+							<port>8080</port>
+						</ports>
+					</container>
 				</configuration>
 				<executions>
 					<execution>
+						<id>build-image</id>
+						<phase>package</phase>
 						<goals>
-							<goal>create-timestamp</goal>
+							<goal>build</goal>
 						</goals>
 					</execution>
 				</executions>
-				<inherited>false</inherited>
 			</plugin>-->
+
 	    </plugins>
 	    
 	</build>
