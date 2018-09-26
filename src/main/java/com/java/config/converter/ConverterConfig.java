@@ -9,6 +9,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * @author liqihua
@@ -26,6 +27,7 @@ public class ConverterConfig {
         ObjectMapper objectMapper = new ObjectMapper();
         SimpleDateFormat smt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         objectMapper.setDateFormat(smt);
+        objectMapper.setTimeZone(TimeZone.getTimeZone("GMT+08"));//设置时区
         converter.setObjectMapper(objectMapper);
 
         //设置支持的类型
